@@ -1,29 +1,851 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sid Srivastava</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 20%;
-      background: #f9f9f9;
-      color: #333;
-    }
-    h1 {
-      font-size: 3em;
-      margin-bottom: 0.3em;
-    }
-    p {
-      font-size: 1.2em;
-      color: #555;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siddhant Shrivastava | Statistical Data Science</title>
+    
+    <!-- FONT IMPORT (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FONT AWESOME FOR ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        /*
+        ==========================================================================
+        GENERAL STYLING & SETUP
+        ==========================================================================
+        This section sets up the foundational styles for the page.
+        - `*`, `::before`, `::after`: Resets box-sizing for predictable layouts.
+        - `html`: Enables smooth scrolling.
+        - `body`: Sets the font, colors, and removes default margin.
+        - `::-webkit-scrollbar`: Customizes the scrollbar for a sleek look.
+        */
+        :root {
+            --bg-color: #0d0d1a;
+            --primary-color: #ffffff;
+            --secondary-color: #a9a9d2;
+            --accent-color: #8a2be2;
+            --glass-bg: rgba(26, 26, 46, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a045ff;
+        }
+        
+        /*
+        ==========================================================================
+        ADVANCED BACKGROUND EFFECT
+        ==========================================================================
+        TECHNIQUE: Animated Gradient Mesh
+        HOW IT WORKS:
+        1. An absolutely positioned `::before` pseudo-element covers the body.
+        2. It has a huge radial gradient background.
+        3. A CSS animation (`aurora`) continuously moves this background's position.
+        4. A `filter: blur()` on the pseudo-element makes the color transitions
+           super smooth, creating the aurora/lava lamp effect.
+        */
+        #aurora-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        #aurora-background::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150vw;
+            height: 150vw;
+            background: radial-gradient(circle at center, #8a2be2 0%, #4b0082 20%, #000033 40%, transparent 70%);
+            animation: aurora 25s linear infinite;
+            filter: blur(100px);
+            opacity: 0.6;
+            transform-origin: center center;
+        }
+
+        @keyframes aurora {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.2); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+        }
+
+        /*
+        ==========================================================================
+        LAYOUT & GLASSMORPHISM
+        ==========================================================================
+        TECHNIQUE: Glassmorphism Card UI
+        HOW IT WORKS:
+        1. `background`: A semi-transparent color (`var(--glass-bg)`).
+        2. `backdrop-filter: blur(10px)`: This is the key. It blurs whatever is
+           *behind* the element, creating the frosted glass effect.
+        3. `border`: A subtle, semi-transparent border enhances the glass edge.
+        4. `border-radius`: Rounded corners are essential for the modern look.
+        */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /*
+        ==========================================================================
+        HERO SECTION
+        ==========================================================================
+        The main landing view with the dynamic typewriter effect.
+        */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        #hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .typing-container {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            height: 2.2rem; /* Prevent layout shift */
+        }
+        
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.5rem;
+            background-color: var(--accent-color);
+            animation: blink 0.7s infinite;
+            vertical-align: middle;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .social-links {
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 0 1rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        /*
+        ==========================================================================
+        PROJECTS SECTION & 3D TILT EFFECT
+        ==========================================================================
+        TECHNIQUE: CSS Grid & JavaScript-driven 3D Transform
+        HOW IT WORKS:
+        1. CSS Grid (`display: grid`) creates a responsive gallery.
+        2. The JavaScript library (included below) listens for mouse movement
+           on elements with the `data-tilt` attribute.
+        3. It applies CSS `transform` properties (`rotateX`, `rotateY`) in real-time
+           to create a pseudo-3D effect, making the card tilt towards the cursor.
+        */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d; /* Required for the tilt effect */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .project-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            flex-grow: 1;
+        }
+
+        .project-tags {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-tags .tag {
+            display: inline-block;
+            background: rgba(138, 43, 226, 0.2);
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-links a {
+            color: var(--primary-color);
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        .project-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        /*
+        ==========================================================================
+        ABOUT & SKILLS SECTIONS
+        ==========================================================================
+        These use Flexbox for side-by-side content on larger screens.
+        */
+        .about-content, .skills-content {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .about-text, .skills-list {
+            flex: 2;
+        }
+
+        .about-text a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            border-bottom: 1px dotted var(--accent-color);
+        }
+
+        .about-text a:hover {
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--primary-color);
+        }
+
+        .about-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .about-image img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.5);
+        }
+
+        .skills-list ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .skills-list li {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        
+        .skills-list li:hover {
+            background: var(--accent-color);
+            transform: translateY(-5px);
+        }
+
+        /*
+        ==========================================================================
+        SCROLL ANIMATION
+        ==========================================================================
+        TECHNIQUE: Intersection Observer API
+        HOW IT WORKS:
+        1. Elements to be animated have the `hidden` class, which sets their
+           opacity to 0 and moves them down.
+        2. The JavaScript Intersection Observer watches for when these elements
+           enter the viewport.
+        3. When an element is visible, the `show` class is added, which
+           transitions the opacity to 1 and moves it to its original position.
+        */
+        .hidden {
+            opacity: 0;
+            filter: blur(5px);
+            transform: translateY(50px);
+            transition: all 1s;
+        }
+        
+        .show {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+        
+        /* Staggered animation for list items or grid items */
+        .project-card:nth-child(2) { transition-delay: 200ms; }
+        .project-card:nth-child(3) { transition-delay: 400ms; }
+        .skills-list li:nth-child(2) { transition-delay: 100ms; }
+        .skills-list li:nth-child(3) { transition-delay: 200ms; }
+        /* Add more as needed */
+
+        /*
+        ==========================================================================
+        RESPONSIVE DESIGN
+        ==========================================================================
+        Media queries to adjust the layout for smaller screens.
+        */
+        @media (max-width: 768px) {
+            #hero h1 {
+                font-size: 2.8rem;
+            }
+            .typing-container {
+                font-size: 1.2rem;
+            }
+            .about-content, .skills-content {
+                flex-direction: column;
+            }
+            .about-image {
+                margin-bottom: 2rem;
+            }
+            section {
+                padding: 4rem 0;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Sid Srivastava</h1>
-  <p>Student at ISI Delhi</p>
-  <p>Pursuing Bachelor of Statistical Data Science</p>
+
+    <div id="aurora-background"></div>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section id="hero">
+            <h1 class="hidden">Siddhant Shrivastava</h1>
+            <div class="typing-container hidden" style="transition-delay: 200ms;">
+                <span id="typing-text"></span><span class="typing-cursor"></span>
+            </div>
+            <div class="social-links hidden" style="transition-delay: 400ms;">
+                <!-- ================== -->
+                <!-- HOW TO INTEGRATE   -->
+                <!-- Update these links -->
+                <!-- ================== -->
+                <a href="https://github.com/sid-datascience" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/sid-datascience-isi" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <!-- You can add more, like a link to your resume -->
+                <a href="resume.pdf" target="_blank" aria-label="Resume"><i class="fas fa-file-pdf"></i></a>
+            </div>
+        </section>
+
+        <div class="container">
+
+            <!-- ABOUT SECTION -->
+            <section id="about">
+                <h2 class="section-title hidden">About Me</h2>
+                <div class="about-content hidden" style="transition-delay: 200ms;">
+                    <div class="about-text glass-card">
+                        <!-- ================== -->
+                        <!-- HOW TO INTEGRATE   -->
+                        <!-- Write your personal bio here -->
+                        <!-- ================== -->
+                        <p>
+                            I am an Integrated Master's student in Statistical Data Science at the prestigious Indian Statistical Institute (ISI), Delhi. My passion lies at the intersection of rigorous mathematical theory and its practical application in solving complex, real-world problems.
+                        </p>
+                        <p>
+                            Beyond academics, I am a dedicated competitive chess player and the reigning ISI Delhi Chess Champion, holding an <a href="https://ratings.fide.com/profile/33429030" target="_blank" rel="noopener noreferrer">Official FIDE Blitz Rating of ~1700</a>. I find that the strategic foresight, pattern recognition, and calm decision-making required in chess are directly transferable to the world of data analysis and algorithmic problem-solving.
+                        </p>
+                    </div>
+                    <div class="about-image">
+                        <!-- ================== -->
+                        <!-- HOW TO INTEGRATE   -->
+                        <!-- Replace with a URL to your photo -->
+                        <!-- ================== -->
+                        <img src="https://placehold.co/250x250/8a2be2/FFFFFF?text=SS" alt="Siddhant Shrivastava">
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROJECTS SECTION -->
+            <section id="projects">
+                <h2 class="section-title hidden">Projects</h2>
+                <div class="projects-grid">
+                    
+                    <!-- ================== -->
+                    <!-- HOW TO INTEGRATE   -->
+                    <!-- This is your project template. Copy and paste this whole
+                         `project-card` block for each new project you want to add.
+                         Update the title, description, tags, and links. -->
+                    <!-- ================== -->
+                    <div class="project-card hidden" data-tilt>
+                        <h3>Project Title 1</h3>
+                        <p>Upcoming</p>
+                        <div class="project-tags">
+                            <span class="tag">Skill 1</span>
+                            <span class="tag">Skill 2</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                            <!-- <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i></a> Link to live demo -->
+                        </div>
+                    </div>
+                                </section>
+            
+            <!-- SKILLS SECTION -->
+            <section id="skills">
+                <h2 class="section-title hidden">Skills & Coursework</h2>
+                <div class="skills-content glass-card hidden" style="transition-delay: 200ms;">
+                    <div class="skills-list">
+                        <!-- ================== -->
+                        <!-- HOW TO INTEGRATE   -->
+                        <!-- Update your skills and coursework here -->
+                        <!-- ================== -->
+                        <h4>Technical Skills</h4>
+                        <ul>
+                            <li>Python</li>
+                            <li>R</li>
+                            <li>LaTeX</li>
+                        </ul>
+                    </div>
+                     <div class="skills-list">
+                        <h4>Relevant Coursework (Semester I)</h4>
+                        <ul>
+                            <li>Probability I</li>
+                            <li>Statistics I</li>
+                            <li>Mathematics I</li>
+                            <li>Introduction to Computing</li>
+                            <li>Economics I</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+<script>
+/*
+==========================================================================
+JAVASCRIPT FOR INTERACTIVITY
+==========================================================================
+This script contains all the logic for the page's dynamic features.
+Each section is explained below.
+*/
+
+// --- 1. SCROLL ANIMATIONS (Intersection Observer) ---
+// This code watches for elements with the "hidden" class. When they scroll
+// into view, it swaps it for the "show" class, triggering the CSS animation.
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+        } else {
+            // Optional: remove 'show' to re-animate on scroll up
+            // entry.target.classList.remove('show');
+        }
+    });
+});
+
+const hiddenElements = document.querySelectorAll('.hidden');
+hiddenElements.forEach((el) => observer.observe(el));
+
+
+// --- 2. DYNAMIC TYPEWRITER EFFECT ---
+const typingTextElement = document.getElementById('typing-text');
+const words = [
+    "Statistical Data Science Student @ ISI Delhi.",
+    "Competitive Chess Player.",
+    "Mathematical Problem Solver."
+];
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+    const currentWord = words[wordIndex];
+    if (isDeleting) {
+        typingTextElement.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+        }
+    } else {
+        typingTextElement.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === currentWord.length) {
+            isDeleting = true;
+            setTimeout(type, 2000); // Pause at end of word
+            return;
+        }
+    }
+    const typingSpeed = isDeleting ? 50 : 150;
+    setTimeout(type, typingSpeed);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(type, 250); // Start typing after a short delay
+});
+
+
+// --- 3. 3D TILT EFFECT (vanilla-tilt.js) ---
+// This is the full code for a lightweight library to create the 3D tilt
+// effect. It's included here so the HTML file is completely self-contained.
+// You don't need to edit this library code.
+class VanillaTilt {
+  constructor(element, settings = {}) {
+    if (!(element instanceof Node)) {
+      throw("Can't initialize VanillaTilt because " + element + " is not a Node.");
+    }
+
+    this.width = null;
+    this.height = null;
+    this.left = null;
+    this.top = null;
+    this.transitionTimeout = null;
+    this.updateCall = null;
+
+    this.element = element;
+    this.settings = this.extendSettings(settings);
+
+    this.reverse = this.settings.reverse ? -1 : 1;
+    this.glare = this.settings.glare;
+    this.glarePrerender = this.settings["glare-prerender"];
+
+    if (this.glare) {
+      this.prepareGlare();
+    }
+
+    this.addEventListeners();
+  }
+
+  isSettingTrue(setting) {
+    return setting === "" || setting === true || setting === 1;
+  }
+
+  addEventListeners() {
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
+    this.onWindowResize = this.onWindowResize.bind(this);
+
+    this.element.addEventListener("mouseenter", this.onMouseEnter);
+    this.element.addEventListener("mousemove", this.onMouseMove);
+    this.element.addEventListener("mouseleave", this.onMouseLeave);
+
+    if (this.glare) {
+      window.addEventListener("resize", this.onWindowResize);
+    }
+  }
+
+  removeEventListeners() {
+    this.element.removeEventListener("mouseenter", this.onMouseEnter);
+    this.element.removeEventListener("mousemove", this.onMouseMove);
+    this.element.removeEventListener("mouseleave", this.onMouseLeave);
+
+    if (this.glare) {
+      window.removeEventListener("resize", this.onWindowResize);
+    }
+  }
+
+  destroy() {
+    this.removeEventListeners();
+    this.element.vanillaTilt = null;
+    delete this.element.vanillaTilt;
+    this.element = null;
+  }
+
+  onMouseEnter(event) {
+    this.updateElementPosition();
+    this.element.style.willChange = "transform";
+    this.setTransition();
+  }
+
+  onMouseMove(event) {
+    if (this.updateCall !== null) {
+      cancelAnimationFrame(this.updateCall);
+    }
+    this.event = event;
+    this.updateCall = requestAnimationFrame(() => this.update());
+  }
+
+  onMouseLeave(event) {
+    this.setTransition();
+    if (this.settings.reset) {
+      requestAnimationFrame(() => this.reset());
+    }
+  }
+
+  reset() {
+    this.event = {
+      pageX: this.left + this.width / 2,
+      pageY: this.top + this.height / 2
+    };
+    this.element.style.transform = "perspective(" + this.settings.perspective + "px) " +
+      "rotateX(0deg) " +
+      "rotateY(0deg) " +
+      "scale3d(1, 1, 1)";
+    if (this.glare) {
+      this.glareElement.style.transform = "rotate(180deg) translate(-50%, -50%)";
+      this.glareElement.style.opacity = "0";
+    }
+  }
+
+  getValues() {
+    let x = (this.event.clientX - this.left) / this.width;
+    let y = (this.event.clientY - this.top) / this.height;
+    x = Math.min(Math.max(x, 0), 1);
+    y = Math.min(Math.max(y, 0), 1);
+    let tiltX = (this.reverse * (this.settings.max / 2 - x * this.settings.max)).toFixed(2);
+    let tiltY = (this.reverse * (y * this.settings.max - this.settings.max / 2)).toFixed(2);
+    let angle = Math.atan2(this.event.clientX - (this.left + this.width / 2), -(this.event.clientY - (this.top + this.height / 2))) * (180 / Math.PI);
+    return {
+      tiltX: tiltX,
+      tiltY: tiltY,
+      percentageX: x * 100,
+      percentageY: y * 100,
+      angle: angle
+    };
+  }
+
+  updateElementPosition() {
+    let rect = this.element.getBoundingClientRect();
+    this.width = this.element.offsetWidth;
+    this.height = this.element.offsetHeight;
+    this.left = rect.left;
+    this.top = rect.top;
+  }
+
+  update() {
+    let values = this.getValues();
+    this.element.style.transform = "perspective(" + this.settings.perspective + "px) " +
+      "rotateX(" + (this.settings.axis === "y" ? 0 : values.tiltY) + "deg) " +
+      "rotateY(" + (this.settings.axis === "x" ? 0 : values.tiltX) + "deg) " +
+      "scale3d(" + this.settings.scale + ", " + this.settings.scale + ", " + this.settings.scale + ")";
+    if (this.glare) {
+      this.glareElement.style.transform = `rotate(${values.angle}deg) translate(-50%, -50%)`;
+      this.glareElement.style.opacity = `${values.percentageY * this.settings["max-glare"] / 100}`;
+    }
+    this.element.dispatchEvent(new CustomEvent("tiltChange", {
+      "detail": values
+    }));
+    this.updateCall = null;
+  }
+
+  prepareGlare() {
+    if (!this.glarePrerender) {
+      const jsGlare = document.createElement("div");
+      jsGlare.classList.add("js-tilt-glare");
+      const jsGlareInner = document.createElement("div");
+      jsGlareInner.classList.add("js-tilt-glare-inner");
+      jsGlare.appendChild(jsGlareInner);
+      this.element.appendChild(jsGlare);
+    }
+    this.glareElementWrapper = this.element.querySelector(".js-tilt-glare");
+    this.glareElement = this.element.querySelector(".js-tilt-glare-inner");
+    if (this.glarePrerender) {
+      return;
+    }
+    Object.assign(this.glareElementWrapper.style, {
+      "position": "absolute",
+      "top": "0",
+      "left": "0",
+      "width": "100%",
+      "height": "100%",
+      "overflow": "hidden",
+      "pointer-events": "none"
+    });
+    Object.assign(this.glareElement.style, {
+      "position": "absolute",
+      "top": "50%",
+      "left": "50%",
+      "pointer-events": "none",
+      "background-image": `linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)`,
+      "width": `${this.element.offsetWidth * 2}px`,
+      "height": `${this.element.offsetWidth * 2}px`,
+      "transform": "rotate(180deg) translate(-50%, -50%)",
+      "transform-origin": "0% 0%",
+      "opacity": "0"
+    });
+  }
+
+  updateGlareSize() {
+    Object.assign(this.glareElement.style, {
+      "width": `${this.element.offsetWidth * 2}`,
+      "height": `${this.element.offsetWidth * 2}`,
+    });
+  }
+
+  onWindowResize() {
+    this.updateGlareSize();
+  }
+
+  setTransition() {
+    clearTimeout(this.transitionTimeout);
+    this.element.style.transition = this.settings.speed + "ms " + this.settings.easing;
+    if (this.glare) {
+      this.glareElement.style.transition = `opacity ${this.settings.speed}ms ${this.settings.easing}`;
+    }
+    this.transitionTimeout = setTimeout(() => {
+      this.element.style.transition = "";
+      if (this.glare) {
+        this.glareElement.style.transition = "";
+      }
+    }, this.settings.speed);
+  }
+
+  extendSettings(settings) {
+    let defaultSettings = {
+      reverse: false,
+      max: 15,
+      perspective: 1000,
+      easing: "cubic-bezier(.03,.98,.52,.99)",
+      scale: 1,
+      speed: 300,
+      transition: true,
+      axis: null,
+      glare: false,
+      "max-glare": 1,
+      "glare-prerender": false,
+      reset: true
+    };
+    let newSettings = {};
+    for (var property in defaultSettings) {
+      if (property in settings) {
+        newSettings[property] = settings[property];
+      } else if (this.element.hasAttribute("data-tilt-" + property)) {
+        let attribute = this.element.getAttribute("data-tilt-" + property);
+        try {
+          newSettings[property] = JSON.parse(attribute);
+        } catch (e) {
+          newSettings[property] = attribute;
+        }
+      } else {
+        newSettings[property] = defaultSettings[property];
+      }
+    }
+    return newSettings;
+  }
+
+  static init(elements, settings) {
+    if (elements instanceof Node) {
+      elements = [elements];
+    }
+    if (elements instanceof NodeList) {
+      elements = [].slice.call(elements);
+    }
+    if (!(elements instanceof Array)) {
+      return;
+    }
+    elements.forEach((element) => {
+      if (!("vanillaTilt" in element)) {
+        element.vanillaTilt = new VanillaTilt(element, settings);
+      }
+    });
+  }
+}
+
+if (typeof document !== "undefined") {
+  window.VanillaTilt = VanillaTilt;
+  VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
+}
+</script>
+
 </body>
 </html>
+
